@@ -1,0 +1,121 @@
+# Aluno: Diogo F. Novais
+
+#Criar um dataset com pelo menos cinco colunas numéricas e três categóricas.
+#Use as funções de criação de distribuição aleatória, use pelo menos duas
+#Grave seu dataset no disco
+#Você deverá extrair do dataset:
+  
+#Somas e medias das colunas numéricas do dataset usando ??pply
+#Usar split
+#Mostra um gráfico
+#Histograma
+
+#colunas numericas
+# mensalidade custo_medio_mensal idade dependentes recuperacao_media
+
+#colunas categoricas
+#produto sexo cidade
+
+#500 observacoes#
+n <- 500
+
+#5000 beneficiarios#
+b <- 5000
+
+# Mensalidade #
+set.seed(1234)
+mensalidade <- abs(round(rnorm(n, 250, 5), 2))
+
+# Custo medio mensal #
+set.seed(1234)
+custo <- abs(round(rnorm(n, 180, 20), 2))
+
+#Idade#
+set.seed(1234)
+idade <- abs(round(rnorm(n, 30, 7),0))
+
+#Dependentes#
+set.seed(1234)
+dependentes <- abs(round(rnorm(n, 2, 1),0))
+
+#Recupracao media mensal#
+set.seed(1234)
+recuperacao <- abs(round(rnorm(n, 60, 15), 2))
+
+#produto#
+produto.aux <- rep(0:2, b) 
+set.seed(1234)
+produto.temp <- sample(produto.aux, n)
+produto <- factor(produto.temp,
+                    levels = c(0, 1, 2),
+                    labels = c("Personal", "Vitoriamed", "Facil"),
+                    ordered = FALSE
+)
+rm(produto.aux, produto.temp)
+                  
+#sexo#
+sexo.aux <- rep(c(1, 2), b)
+set.seed(1234)
+sexo.temp <- sample(sexo.aux, n)
+
+sexo <- factor(sexo.temp,
+               levels = c(1, 2),
+               labels = c("M", "F"),
+               ordered = FALSE)
+rm(sexo.aux, sexo.temp)
+
+#cidade#
+cidade.aux <- rep(0:2, b) 
+set.seed(1234)
+cidade.temp <- sample(cidade.aux, n)
+cidade <- factor(cidade.temp,
+                  levels = c(0, 1, 2),
+                  labels = c("Vitória", "Vila Velha", "Serra"),
+                  ordered = FALSE
+)
+rm(cidade.aux, cidade.temp)
+
+#Data Frame#
+df <- data.frame(id = 1:n,
+                 cidade,
+                 produto,
+                 sexo,
+                 custo,
+                 dependentes,
+                 idade,
+                 mensalidade,
+                 recuperacao)
+
+
+str(df)
+
+# gravar no disco#
+resultado <- write.table(df, file = "C:\Users\DiDi\Desktop\Delermando Curso\trabalho_r_unimed.csv", sep = ",", col.names = TRUE, fileEncoding = "UTF-8")
+
+# Somar variaveis numericas#
+apply(df[,c("custo", "dependentes", "idade","mensalidade", "recuperacao")],
+      1,
+      sum)
+
+#Média#
+apply(df[,c("custo", "dependentes", "idade","mensalidade", "recuperacao")],
+      1,
+      mean)
+
+#grafico#
+boxplot(df$mensalidade ~ df$produto,
+        main = "Mensalidade por produto",
+        ylab = "mensalidade",
+        xlab = "produto")
+
+boxplot(df$custo ~ df$cidade,
+        main = "Custo por Cidade",
+        ylab = "Custo",
+        xlab = "Cidade")
+
+
+#Histograma#
+hist(df$recuperacao,
+     main = "Histograma de Coparticipação",
+     xlab = "Copart",
+     ylab = "Freqüência")
